@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Code Review Notes Generator",
+  "description": "An intelligent tool that accepts 'before' and 'after' code versions to automatically generate detailed code review notes and change logs using the power of Gemini.",
+  "requestFramePermissions": []
+}

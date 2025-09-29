@@ -8,7 +8,11 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ notes }) => {
   if (!notes) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-slate-500">Your generated notes will appear here.</p>
+        <p className="text-slate-500 text-center">
+            Your generated notes will appear here.
+            <br />
+            Select an item from history or fill out the fields to get started.
+        </p>
       </div>
     );
   }

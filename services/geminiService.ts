@@ -1,16 +1,16 @@
 import { GoogleGenAI } from "@google/genai";
 
-if (!process.env.API_KEY) {
-    throw new Error("API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 export async function generateChangeNotes(
+  apiKey: string,
   filename: string,
   beforeCode: string,
   afterCode: string
 ): Promise<string> {
+  if (!apiKey) {
+    throw new Error("Gemini API Key is missing.");
+  }
+  const ai = new GoogleGenAI({ apiKey });
+
   const prompt = `
 You are an expert senior software engineer and a world-class technical writer specializing in code review and release notes.
 
@@ -59,6 +59,9 @@ Format the output in Markdown for clear readability. Use headings, bold text, an
     return response.text;
   } catch (error) {
     console.error("Error calling Gemini API:", error);
+    if (error instanceof Error && error.message.includes('API key not valid')) {
+       throw new Error("The provided API Key is not valid. Please check it and try again.");
+    }
     throw new Error(
       "Failed to generate change notes. Please check your API key and network connection."
     );

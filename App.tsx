@@ -6,7 +6,6 @@ import Button from './components/Button';
 import Loader from './components/Loader';
 import { generateChangeNotes } from './services/geminiService';
 import HistorySidebar from './components/HistorySidebar';
-import { DownloadIcon } from './components/icons/DownloadIcon';
 
 export interface HistoryEntry {
   id: string;
@@ -100,25 +99,6 @@ const App: React.FC = () => {
     setActiveHistoryId(null);
   };
 
-  const handleDownloadNotes = () => {
-    if (!changeNotes || !filename) return;
-
-    // Sanitize filename for download
-    const sanitizedFilename = filename.replace(/[^a-zA-Z0-9._-]/g, '_');
-    const downloadFilename = `${sanitizedFilename}.md`;
-
-    const blob = new Blob([changeNotes], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = downloadFilename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
-
   const isButtonDisabled = !apiKey || !filename || !beforeCode || !afterCode || isLoading;
 
   return (
@@ -182,18 +162,8 @@ const App: React.FC = () => {
 
           {/* Output Section */}
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg shadow-lg flex flex-col overflow-hidden">
-            <div className="p-4 border-b border-slate-700 flex justify-between items-center">
+            <div className="p-4 border-b border-slate-700">
               <h2 className="text-lg font-semibold text-sky-400">Generated Change Notes</h2>
-              <button
-                onClick={handleDownloadNotes}
-                disabled={!changeNotes || isLoading}
-                className="flex items-center gap-2 px-3 py-1 text-sm bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-md disabled:bg-slate-800 disabled:text-slate-500 disabled:cursor-not-allowed transition-colors"
-                title="Download as Markdown"
-                aria-label="Download notes as markdown"
-              >
-                <DownloadIcon className="h-4 w-4" />
-                <span>Download</span>
-              </button>
             </div>
             <div className="p-6 flex-grow overflow-y-auto relative">
               {isLoading ? (
